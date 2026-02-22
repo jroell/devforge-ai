@@ -7,8 +7,12 @@ import { useSettingsStore } from '@/stores/settings'
 import { useAiConfigStore } from '@/stores/ai-config'
 import { useHistoryStore, loadHistory } from '@/stores/history'
 import { useCustomToolsStore } from '@/stores/custom-tools'
+import { useLicenseStore } from '@/stores/license'
+import { useUsageStore } from '@/stores/usage'
 import { getToolById } from '@/tools/registry'
 import { registerCustomTools } from '@/tools/custom/register-custom'
+import { TrialBanner } from '@/components/license/TrialBanner'
+import { UpgradeGate } from '@/components/license/UpgradeGate'
 
 // Side-effect import: triggers tool self-registration
 import '@/tools/register'
@@ -17,6 +21,9 @@ function App(): React.JSX.Element {
   const setActiveTool = useSettingsStore((s) => s.setActiveTool)
   const activeTool = useSettingsStore((s) => s.activeTool)
   const addHistoryEntry = useHistoryStore((s) => s.addEntry)
+  const initializeLicense = useLicenseStore((s) => s.initialize)
+  const updateLicenseFromServer = useLicenseStore((s) => s.updateFromServer)
+  const trackUsage = useUsageStore((s) => s.trackUsage)
 
   // Check if this is a popped-out window
   const popoutToolId = useMemo(() => {
@@ -45,14 +52,28 @@ function App(): React.JSX.Element {
     useCustomToolsStore.getState().loadTools().then(() => {
       registerCustomTools(useCustomToolsStore.getState().tools)
     })
+    initializeLicense()
+    useUsageStore.getState().loadFromStorage()
   }, [])
 
-  // Track tool changes in history
+  // Listen for license status updates from main process
+  useEffect(() => {
+    const unsubscribe = window.api.license.onStatusUpdate((state) => {
+      updateLicenseFromServer(state)
+    })
+    return unsubscribe
+  }, [updateLicenseFromServer])
+
+  // Track tool changes in history and usage
   useEffect(() => {
     if (activeTool) {
       addHistoryEntry(activeTool)
+      const tool = getToolById(activeTool)
+      if (tool) {
+        trackUsage(activeTool, tool.name)
+      }
     }
-  }, [activeTool, addHistoryEntry])
+  }, [activeTool, addHistoryEntry, trackUsage])
 
   // Global keyboard shortcuts
   useEffect(() => {
@@ -94,12 +115,14 @@ function App(): React.JSX.Element {
   return (
     <div className="flex h-screen flex-col overflow-hidden">
       <TitleBar />
+      <TrialBanner />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <main className="flex-1 overflow-auto p-4">
           <ToolShell />
         </main>
       </div>
+      <UpgradeGate />
     </div>
   )
 }
