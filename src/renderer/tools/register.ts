@@ -1,7 +1,13 @@
 // Import each tool module here to trigger self-registration.
 
-// Phase 1: Formatters
+// Phase 1 + Phase 3: Formatters
 import './formatters/json-formatter'
+import './formatters/xml-formatter'
+import './formatters/html-formatter'
+import './formatters/css-formatter'
+import './formatters/js-formatter'
+import './formatters/sql-formatter'
+import './formatters/yaml-formatter'
 
 // Phase 1: Encoders
 import './encoders/base64'
