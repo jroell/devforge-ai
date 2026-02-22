@@ -6,6 +6,7 @@ import { registerCryptoHandlers } from './ipc/crypto'
 import { registerSystemHandlers } from './ipc/system'
 import { registerStorageHandlers } from './ipc/storage'
 import { registerAiHandlers } from './ipc/ai'
+import { registerCustomToolHandlers } from './ipc/custom-tools'
 import { createTray } from './tray'
 import { detectClipboardType } from './services/clipboard-detector'
 import { registerUpdaterHandlers } from './ipc/updater'
@@ -72,6 +73,7 @@ app.whenReady().then(() => {
   registerSystemHandlers()
   registerStorageHandlers()
   registerAiHandlers()
+  registerCustomToolHandlers()
 
   ipcMain.handle('window:popout', (_event, toolId: string) => {
     const child = new BrowserWindow({

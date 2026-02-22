@@ -90,6 +90,12 @@ const api: ElectronAPI = {
       }
     }
   },
+  customTools: {
+    list: (): Promise<unknown[]> => ipcRenderer.invoke('custom-tools:list'),
+    get: (id: string): Promise<unknown> => ipcRenderer.invoke('custom-tools:get', id),
+    save: (config: unknown): Promise<unknown> => ipcRenderer.invoke('custom-tools:save', config),
+    delete: (id: string): Promise<void> => ipcRenderer.invoke('custom-tools:delete', id),
+  },
   updater: {
     check: (): Promise<string | null> => ipcRenderer.invoke('updater:check'),
     download: (): Promise<void> => ipcRenderer.invoke('updater:download'),

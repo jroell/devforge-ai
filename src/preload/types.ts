@@ -38,6 +38,12 @@ export interface ElectronAPI {
     onStreamEnd(callback: () => void): () => void
     onStreamError(callback: (error: string) => void): () => void
   }
+  customTools: {
+    list(): Promise<unknown[]>
+    get(id: string): Promise<unknown>
+    save(config: unknown): Promise<unknown>
+    delete(id: string): Promise<void>
+  }
   updater: {
     check(): Promise<string | null>
     download(): Promise<void>
