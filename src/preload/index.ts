@@ -130,6 +130,19 @@ const api: ElectronAPI = {
       ipcRenderer.on('updater:error', handler)
       return () => { ipcRenderer.removeListener('updater:error', handler) }
     }
+  },
+  license: {
+    fingerprint: (): Promise<string> => ipcRenderer.invoke('license:fingerprint'),
+    activate: () => ipcRenderer.invoke('license:activate'),
+    validate: () => ipcRenderer.invoke('license:validate'),
+    check: () => ipcRenderer.invoke('license:check'),
+    cached: () => ipcRenderer.invoke('license:cached'),
+    upgrade: (): Promise<string> => ipcRenderer.invoke('license:upgrade'),
+    onStatusUpdate: (callback: (state: unknown) => void): (() => void) => {
+      const handler = (_e: Electron.IpcRendererEvent, state: unknown): void => { callback(state as any) }
+      ipcRenderer.on('license:status-update', handler)
+      return () => { ipcRenderer.removeListener('license:status-update', handler) }
+    },
   }
 }
 

@@ -55,6 +55,42 @@ export interface ElectronAPI {
     onDownloaded(callback: () => void): () => void
     onError(callback: (error: string) => void): () => void
   }
+  license: {
+    fingerprint(): Promise<string>
+    activate(): Promise<{
+      status: 'trial' | 'expired' | 'licensed'
+      machineId: string
+      expiresAt: string | null
+      timestamp: number
+      signature: string
+    }>
+    validate(): Promise<{
+      status: 'trial' | 'expired' | 'licensed'
+      machineId: string
+      expiresAt: string | null
+      timestamp: number
+      signature: string
+    }>
+    check(): Promise<{
+      status: 'trial' | 'expired' | 'licensed' | 'unknown'
+      expiresAt: string | null
+      daysRemaining: number | null
+      lastValidated: number | null
+    }>
+    cached(): Promise<{
+      status: 'trial' | 'expired' | 'licensed' | 'unknown'
+      expiresAt: string | null
+      daysRemaining: number | null
+      lastValidated: number | null
+    }>
+    upgrade(): Promise<string>
+    onStatusUpdate(callback: (state: {
+      status: 'trial' | 'expired' | 'licensed' | 'unknown'
+      expiresAt: string | null
+      daysRemaining: number | null
+      lastValidated: number | null
+    }) => void): () => void
+  }
 }
 
 declare global {

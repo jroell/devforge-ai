@@ -44,6 +44,15 @@ if (!window.api) {
       get: () => Promise.resolve({}),
       save: (c: unknown) => Promise.resolve(c),
       delete: noopAsync
+    },
+    license: {
+      fingerprint: () => Promise.resolve('dev-fingerprint-mock'),
+      activate: () => Promise.resolve({ status: 'trial' as const, machineId: 'dev', expiresAt: new Date(Date.now() + 7 * 86400000).toISOString(), timestamp: Date.now(), signature: 'mock' }),
+      validate: () => Promise.resolve({ status: 'trial' as const, machineId: 'dev', expiresAt: new Date(Date.now() + 7 * 86400000).toISOString(), timestamp: Date.now(), signature: 'mock' }),
+      check: () => Promise.resolve({ status: 'licensed' as const, expiresAt: null, daysRemaining: null, lastValidated: Date.now() }),
+      cached: () => Promise.resolve({ status: 'licensed' as const, expiresAt: null, daysRemaining: null, lastValidated: Date.now() }),
+      upgrade: () => Promise.resolve('https://example.com'),
+      onStatusUpdate: noopUnsub,
     }
   }
 }
