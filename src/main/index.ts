@@ -10,6 +10,7 @@ import { registerCustomToolHandlers } from './ipc/custom-tools'
 import { createTray } from './tray'
 import { detectClipboardType } from './services/clipboard-detector'
 import { registerUpdaterHandlers } from './ipc/updater'
+import { registerLicenseHandlers } from './ipc/license'
 
 let mainWindow: BrowserWindow | null = null
 
@@ -107,6 +108,7 @@ app.whenReady().then(() => {
 
   if (mainWindow) {
     registerUpdaterHandlers(mainWindow)
+    registerLicenseHandlers(mainWindow)
     // Check for updates 5 seconds after launch (don't block startup)
     setTimeout(() => {
       mainWindow?.webContents.send('updater:checking')
