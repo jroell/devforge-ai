@@ -35,7 +35,7 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        'flex shrink-0 flex-col overflow-hidden border-r border-border bg-sidebar-background transition-[width] duration-200 ease-in-out',
+        'flex shrink-0 flex-col overflow-hidden border-r border-border bg-sidebar-background text-sidebar-foreground transition-[width] duration-200 ease-in-out',
         sidebarCollapsed ? 'w-14' : 'w-56'
       )}
     >
