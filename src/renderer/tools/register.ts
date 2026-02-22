@@ -13,3 +13,10 @@ import './converters/unix-timestamp'
 import './generators/hash-generator'
 import './generators/uuid-generator'
 import './inspectors/regex-tester'
+
+// AI Tools
+import './ai/code-generator'
+import './ai/magic-transform'
+
+// Generators (AI-powered)
+import './generators/mock-data-generator'
