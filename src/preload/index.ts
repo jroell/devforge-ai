@@ -8,6 +8,10 @@ const api: ElectronAPI = {
     detectType: (): Promise<{ toolId: string; content: string; confidence: number }> =>
       ipcRenderer.invoke('clipboard:detect')
   },
+  crypto: {
+    hash: (algorithm: string, data: string): Promise<string> =>
+      ipcRenderer.invoke('crypto:hash', algorithm, data)
+  },
   window: {
     minimize: (): void => {
       ipcRenderer.send('window:minimize')

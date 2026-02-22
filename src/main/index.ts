@@ -2,6 +2,7 @@ import { app, BrowserWindow, clipboard, globalShortcut, shell } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import { registerClipboardHandlers } from './ipc/clipboard'
+import { registerCryptoHandlers } from './ipc/crypto'
 import { registerSystemHandlers } from './ipc/system'
 import { createTray } from './tray'
 import { detectClipboardType } from './services/clipboard-detector'
@@ -64,6 +65,7 @@ function showAndFocus(): void {
 
 app.whenReady().then(() => {
   registerClipboardHandlers()
+  registerCryptoHandlers()
   registerSystemHandlers()
 
   createWindow()

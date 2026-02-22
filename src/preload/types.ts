@@ -4,6 +4,9 @@ export interface ElectronAPI {
     write(text: string): Promise<void>
     detectType(): Promise<{ toolId: string; content: string; confidence: number }>
   }
+  crypto: {
+    hash(algorithm: string, data: string): Promise<string>
+  }
   window: {
     minimize(): void
     hide(): void
