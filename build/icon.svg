@@ -1,4 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="80" fill="#1a1a2e"/>
-  <text x="256" y="300" font-family="system-ui" font-size="200" font-weight="bold" text-anchor="middle" fill="#e94560">DF</text>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f0f1a"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b81"/>
+      <stop offset="100%" stop-color="#e94560"/>
+    </linearGradient>
+    <linearGradient id="accentFade" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e94560" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#e94560" stop-opacity="0.25"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- Left bracket -->
+  <path d="M168 168 L120 262 L168 356" stroke="url(#accent)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Right bracket -->
+  <path d="M344 168 L392 262 L344 356" stroke="url(#accent)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Center diamond -->
+  <path d="M256 198 L286 262 L256 326 L226 262 Z" fill="url(#accent)"/>
+  <!-- Anvil base -->
+  <line x1="156" y1="394" x2="356" y2="394" stroke="url(#accentFade)" stroke-width="18" stroke-linecap="round"/>
 </svg>

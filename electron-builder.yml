@@ -41,10 +41,11 @@ win:
   icon: build/icon.ico
   artifactName: "${productName}-${version}-Setup.${ext}"
 nsis:
-  oneClick: false
+  oneClick: true
   perMachine: false
-  allowToChangeInstallationDirectory: true
+  allowElevation: true
   deleteAppDataOnUninstall: false
+  runAfterFinish: true
 linux:
   target:
     - target: AppImage
@@ -56,12 +57,13 @@ linux:
   icon: build/icons
   category: Development
   desktop:
-    Name: DevForge AI
-    Comment: AI-Supercharged Developer Toolbox
-    Categories: Development;Utility
+    entry:
+      Name: DevForge AI
+      Comment: AI-Supercharged Developer Toolbox
+      Categories: Development;Utility
   artifactName: "${productName}-${version}-${arch}.${ext}"
 publish:
   provider: github
-  owner: jasonroell
+  owner: jroell
   repo: devforge-ai
   releaseType: release
