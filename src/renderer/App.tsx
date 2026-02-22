@@ -6,7 +6,9 @@ import { ToolSkeleton } from '@/components/shared/ToolSkeleton'
 import { useSettingsStore } from '@/stores/settings'
 import { useAiConfigStore } from '@/stores/ai-config'
 import { useHistoryStore, loadHistory } from '@/stores/history'
+import { useCustomToolsStore } from '@/stores/custom-tools'
 import { getToolById } from '@/tools/registry'
+import { registerCustomTools } from '@/tools/custom/register-custom'
 
 // Side-effect import: triggers tool self-registration
 import '@/tools/register'
@@ -40,6 +42,9 @@ function App(): React.JSX.Element {
   useEffect(() => {
     useAiConfigStore.getState().loadFromKeychain()
     loadHistory()
+    useCustomToolsStore.getState().loadTools().then(() => {
+      registerCustomTools(useCustomToolsStore.getState().tools)
+    })
   }, [])
 
   // Track tool changes in history

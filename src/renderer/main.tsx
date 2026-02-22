@@ -38,6 +38,12 @@ if (!window.api) {
       onProgress: noopUnsub,
       onDownloaded: noopUnsub,
       onError: noopUnsub
+    },
+    customTools: {
+      list: () => Promise.resolve([]),
+      get: () => Promise.resolve({}),
+      save: (c: unknown) => Promise.resolve(c),
+      delete: noopAsync
     }
   }
 }
