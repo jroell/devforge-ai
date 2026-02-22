@@ -1,9 +1,12 @@
-import { contextBridge, clipboard, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
+import type { ElectronAPI } from './types'
 
-const api = {
+const api: ElectronAPI = {
   clipboard: {
-    readText: (): string => clipboard.readText(),
-    writeText: (text: string): void => clipboard.writeText(text)
+    read: (): Promise<string> => ipcRenderer.invoke('clipboard:read'),
+    write: (text: string): Promise<void> => ipcRenderer.invoke('clipboard:write', text),
+    detectType: (): Promise<{ toolId: string; content: string; confidence: number }> =>
+      ipcRenderer.invoke('clipboard:detect')
   },
   window: {
     minimize: (): void => {
@@ -11,6 +14,17 @@ const api = {
     },
     hide: (): void => {
       ipcRenderer.send('window:hide')
+    }
+  },
+  onClipboardContent: (
+    callback: (data: { toolId: string; content: string }) => void
+  ): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { toolId: string; content: string }): void => {
+      callback(data)
+    }
+    ipcRenderer.on('clipboard:content', handler)
+    return () => {
+      ipcRenderer.removeListener('clipboard:content', handler)
     }
   }
 }

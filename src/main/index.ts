@@ -1,9 +1,15 @@
-import { app, BrowserWindow, shell } from 'electron'
+import { app, BrowserWindow, clipboard, globalShortcut, shell } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
+import { registerClipboardHandlers } from './ipc/clipboard'
+import { registerSystemHandlers } from './ipc/system'
+import { createTray } from './tray'
+import { detectClipboardType } from './services/clipboard-detector'
+
+let mainWindow: BrowserWindow | null = null
 
 function createWindow(): void {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     minWidth: 800,
@@ -22,7 +28,7 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow?.show()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -37,12 +43,40 @@ function createWindow(): void {
   }
 }
 
+function showAndFocus(): void {
+  if (!mainWindow) return
+
+  if (mainWindow.isMinimized()) {
+    mainWindow.restore()
+  }
+  mainWindow.show()
+  mainWindow.focus()
+
+  const text = clipboard.readText()
+  if (text) {
+    const detection = detectClipboardType(text)
+    mainWindow.webContents.send('clipboard:content', {
+      toolId: detection.toolId,
+      content: detection.content
+    })
+  }
+}
+
 app.whenReady().then(() => {
+  registerClipboardHandlers()
+  registerSystemHandlers()
+
   createWindow()
+
+  createTray(showAndFocus)
+
+  globalShortcut.register('Alt+Space', showAndFocus)
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow()
+    } else {
+      showAndFocus()
     }
   })
 })
@@ -51,4 +85,8 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+})
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll()
 })
