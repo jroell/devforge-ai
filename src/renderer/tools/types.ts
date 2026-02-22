@@ -1,7 +1,7 @@
 import { type LucideIcon } from 'lucide-react'
 import { type LazyExoticComponent, type ComponentType } from 'react'
 
-export type ToolCategory = 'formatters' | 'encoders' | 'converters' | 'generators' | 'inspectors' | 'ai'
+export type ToolCategory = 'formatters' | 'encoders' | 'converters' | 'generators' | 'inspectors' | 'ai' | 'custom'
 
 export interface ToolDefinition {
   id: string
@@ -21,9 +21,10 @@ export const categoryLabels: Record<ToolCategory, string> = {
   converters: 'Converters',
   generators: 'Generators',
   inspectors: 'Inspectors & Text',
-  ai: 'AI Tools'
+  ai: 'AI Tools',
+  custom: 'Custom Tools'
 }
 
 export const categoryOrder: ToolCategory[] = [
-  'formatters', 'encoders', 'converters', 'generators', 'inspectors', 'ai'
+  'formatters', 'encoders', 'converters', 'generators', 'inspectors', 'ai', 'custom'
 ]
