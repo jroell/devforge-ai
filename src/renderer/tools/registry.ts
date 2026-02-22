@@ -9,6 +9,13 @@ export function registerTool(tool: ToolDefinition): void {
   }
 }
 
+export function unregisterTool(id: string): void {
+  const idx = tools.findIndex((t) => t.id === id)
+  if (idx !== -1) {
+    tools.splice(idx, 1)
+  }
+}
+
 export function getTools(): ToolDefinition[] {
   return tools
 }
