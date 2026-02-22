@@ -28,3 +28,21 @@ import './ai/log-analyzer'
 
 // Generators (AI-powered)
 import './generators/mock-data-generator'
+
+// Phase 3: Encoders
+import './encoders/html-entities'
+import './encoders/hex-ascii'
+
+// Phase 3: Converters
+import './converters/json-yaml'
+import './converters/number-base'
+import './converters/text-case'
+import './converters/json-csv'
+
+// Phase 3: Generators
+import './generators/password-generator'
+
+// Phase 3: Inspectors
+import './inspectors/diff-checker'
+import './inspectors/text-inspector'
+import './inspectors/markdown-viewer'
