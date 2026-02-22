@@ -32,7 +32,7 @@ export async function activateTrial(): Promise<LicensePayload> {
     throw new Error(`Activation failed: ${response.status}`)
   }
 
-  const payload: LicensePayload = await response.json()
+  const payload = (await response.json()) as LicensePayload
   cacheLicensePayload(payload)
   return payload
 }
@@ -49,7 +49,7 @@ export async function validateLicense(): Promise<LicensePayload> {
     throw new Error(`Validation failed: ${response.status}`)
   }
 
-  const payload: LicensePayload = await response.json()
+  const payload = (await response.json()) as LicensePayload
   cacheLicensePayload(payload)
   return payload
 }
@@ -66,8 +66,8 @@ export async function getCheckoutUrl(): Promise<string> {
     throw new Error(`Checkout failed: ${response.status}`)
   }
 
-  const { url } = await response.json()
-  return url
+  const data = (await response.json()) as { url: string }
+  return data.url
 }
 
 function cacheLicensePayload(payload: LicensePayload): void {

@@ -138,8 +138,8 @@ const api: ElectronAPI = {
     check: () => ipcRenderer.invoke('license:check'),
     cached: () => ipcRenderer.invoke('license:cached'),
     upgrade: (): Promise<string> => ipcRenderer.invoke('license:upgrade'),
-    onStatusUpdate: (callback: (state: unknown) => void): (() => void) => {
-      const handler = (_e: Electron.IpcRendererEvent, state: unknown): void => { callback(state as any) }
+    onStatusUpdate: (callback: (state: { status: 'trial' | 'expired' | 'licensed' | 'unknown'; expiresAt: string | null; daysRemaining: number | null; lastValidated: number | null }) => void): (() => void) => {
+      const handler = (_e: Electron.IpcRendererEvent, state: { status: 'trial' | 'expired' | 'licensed' | 'unknown'; expiresAt: string | null; daysRemaining: number | null; lastValidated: number | null }): void => { callback(state) }
       ipcRenderer.on('license:status-update', handler)
       return () => { ipcRenderer.removeListener('license:status-update', handler) }
     },
