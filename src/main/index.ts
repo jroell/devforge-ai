@@ -4,6 +4,8 @@ import { is } from '@electron-toolkit/utils'
 import { registerClipboardHandlers } from './ipc/clipboard'
 import { registerCryptoHandlers } from './ipc/crypto'
 import { registerSystemHandlers } from './ipc/system'
+import { registerStorageHandlers } from './ipc/storage'
+import { registerAiHandlers } from './ipc/ai'
 import { createTray } from './tray'
 import { detectClipboardType } from './services/clipboard-detector'
 
@@ -67,6 +69,8 @@ app.whenReady().then(() => {
   registerClipboardHandlers()
   registerCryptoHandlers()
   registerSystemHandlers()
+  registerStorageHandlers()
+  registerAiHandlers()
 
   createWindow()
 
