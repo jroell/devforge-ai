@@ -46,3 +46,6 @@ import './generators/password-generator'
 import './inspectors/diff-checker'
 import './inspectors/text-inspector'
 import './inspectors/markdown-viewer'
+
+// Custom Tools
+import './custom/tool-builder'
