@@ -1,4 +1,4 @@
-import { app, BrowserWindow, clipboard, globalShortcut, shell } from 'electron'
+import { app, BrowserWindow, clipboard, globalShortcut, ipcMain, shell } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import { registerClipboardHandlers } from './ipc/clipboard'
@@ -8,6 +8,7 @@ import { registerStorageHandlers } from './ipc/storage'
 import { registerAiHandlers } from './ipc/ai'
 import { createTray } from './tray'
 import { detectClipboardType } from './services/clipboard-detector'
+import { registerUpdaterHandlers } from './ipc/updater'
 
 let mainWindow: BrowserWindow | null = null
 
@@ -72,7 +73,51 @@ app.whenReady().then(() => {
   registerStorageHandlers()
   registerAiHandlers()
 
+  ipcMain.handle('window:popout', (_event, toolId: string) => {
+    const child = new BrowserWindow({
+      width: 700,
+      height: 600,
+      minWidth: 400,
+      minHeight: 300,
+      alwaysOnTop: true,
+      titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
+      ...(process.platform === 'darwin'
+        ? { trafficLightPosition: { x: 15, y: 10 } }
+        : {}),
+      webPreferences: {
+        preload: join(__dirname, '../preload/index.js'),
+        contextIsolation: true,
+        nodeIntegration: false,
+        sandbox: false
+      }
+    })
+
+    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+      child.loadURL(`${process.env['ELECTRON_RENDERER_URL']}?tool=${toolId}`)
+    } else {
+      child.loadFile(join(__dirname, '../renderer/index.html'), {
+        query: { tool: toolId }
+      })
+    }
+  })
+
   createWindow()
+
+  if (mainWindow) {
+    registerUpdaterHandlers(mainWindow)
+    // Check for updates 5 seconds after launch (don't block startup)
+    setTimeout(() => {
+      mainWindow?.webContents.send('updater:checking')
+      // Only check in production
+      if (!is.dev) {
+        import('./services/updater').then(({ checkForUpdates }) => {
+          checkForUpdates().catch(() => {
+            // Silently ignore update check failures
+          })
+        })
+      }
+    }, 5000)
+  }
 
   createTray(showAndFocus)
 

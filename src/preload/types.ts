@@ -10,6 +10,7 @@ export interface ElectronAPI {
   window: {
     minimize(): void
     hide(): void
+    popout(toolId: string): Promise<void>
   }
   onClipboardContent(callback: (data: { toolId: string; content: string }) => void): () => void
   keychain: {
@@ -36,6 +37,17 @@ export interface ElectronAPI {
     onStreamChunk(callback: (chunk: string) => void): () => void
     onStreamEnd(callback: () => void): () => void
     onStreamError(callback: (error: string) => void): () => void
+  }
+  updater: {
+    check(): Promise<string | null>
+    download(): Promise<void>
+    install(): Promise<void>
+    onChecking(callback: () => void): () => void
+    onAvailable(callback: (info: { version: string; releaseNotes: unknown }) => void): () => void
+    onNotAvailable(callback: () => void): () => void
+    onProgress(callback: (progress: { percent: number; bytesPerSecond: number; transferred: number; total: number }) => void): () => void
+    onDownloaded(callback: () => void): () => void
+    onError(callback: (error: string) => void): () => void
   }
 }
 
