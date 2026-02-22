@@ -8,6 +8,9 @@ import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { ToolHeader } from '@/components/shared/ToolHeader'
 import { cn } from '@/lib/utils'
+import { useAi } from '@/hooks/useAi'
+import { AiActionBar } from '@/components/ai/AiActionBar'
+import { StreamingOutput } from '@/components/ai/StreamingOutput'
 
 const FLAG_OPTIONS = [
   { flag: 'g', label: 'g', title: 'Global' },
@@ -37,6 +40,11 @@ export default function RegexTesterView() {
   const [flags, setFlags] = useState<Set<string>>(new Set(['g']))
   const [testString, setTestString] = useState('')
   const [error, setError] = useState<string | null>(null)
+
+  const ai = useAi({
+    systemPrompt:
+      'You are a regex expert. Explain the provided regular expression step by step in clear, plain English. Break down each part of the pattern, explain capture groups, quantifiers, anchors, and character classes. Format your response with markdown.',
+  })
 
   useEffect(() => {
     window.api.clipboard.read().then((text) => {
@@ -191,6 +199,13 @@ export default function RegexTesterView() {
     setTestString('')
     setFlags(new Set(['g']))
     setError(null)
+    ai.reset()
+  }
+
+  const handleExplain = () => {
+    const flagStr = Array.from(flags).join('')
+    ai.reset()
+    ai.generate(`Explain this regex pattern: /${pattern}/${flagStr}`)
   }
 
   return (
@@ -247,6 +262,21 @@ export default function RegexTesterView() {
           </div>
         </div>
       </div>
+
+      {/* AI Action Bar for Explain */}
+      {pattern && (
+        <AiActionBar
+          input={pattern}
+          onExplain={handleExplain}
+          showMagicFix={false}
+          showExplain
+          showGenerate={false}
+          isStreaming={ai.isStreaming}
+          activeAction={ai.isStreaming ? 'explain' : null}
+          providerUsed={ai.providerUsed}
+          isLocal={ai.isLocal}
+        />
+      )}
 
       {error && (
         <div className="rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-500">
@@ -328,6 +358,15 @@ export default function RegexTesterView() {
         <div className="rounded-md border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
           No matches found
         </div>
+      )}
+
+      {/* AI Explanation Output */}
+      {(ai.isStreaming || ai.output || ai.error) && (
+        <StreamingOutput
+          output={ai.output}
+          isStreaming={ai.isStreaming}
+          error={ai.error}
+        />
       )}
     </div>
   )

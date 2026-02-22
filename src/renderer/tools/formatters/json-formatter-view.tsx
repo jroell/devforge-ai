@@ -1,14 +1,25 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Braces, Minimize2, Eraser, ArrowRightFromLine } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { MonacoWrapper } from '@/components/editor/MonacoWrapper'
 import { ToolHeader } from '@/components/shared/ToolHeader'
 import { CopyButton } from '@/components/shared/CopyButton'
+import { useAi } from '@/hooks/useAi'
+import { AiActionBar } from '@/components/ai/AiActionBar'
+import { StreamingOutput } from '@/components/ai/StreamingOutput'
 
 export default function JsonFormatterView() {
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
   const [error, setError] = useState<string | null>(null)
+
+  const ai = useAi({
+    systemPrompt:
+      'You are a JSON repair expert. Fix the malformed JSON provided by the user. Return ONLY the corrected JSON with no explanation, no markdown fences, no commentary.',
+  })
+
+  // Track whether the AI just finished so we can apply its output
+  const prevStreamingRef = useRef(ai.isStreaming)
 
   useEffect(() => {
     window.api.clipboard.read().then((text) => {
@@ -30,6 +41,22 @@ export default function JsonFormatterView() {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [output])
+
+  // When AI streaming completes, try to parse the result
+  useEffect(() => {
+    if (prevStreamingRef.current && !ai.isStreaming && ai.output && !ai.error) {
+      try {
+        const parsed = JSON.parse(ai.output)
+        const formatted = JSON.stringify(parsed, null, 2)
+        setInput(ai.output)
+        setOutput(formatted)
+        setError(null)
+      } catch {
+        // AI output is not valid JSON; leave it visible in StreamingOutput
+      }
+    }
+    prevStreamingRef.current = ai.isStreaming
+  }, [ai.isStreaming, ai.output, ai.error])
 
   const formatJson = useCallback((text: string, indent: number) => {
     if (!text.trim()) {
@@ -65,12 +92,18 @@ export default function JsonFormatterView() {
     setInput('')
     setOutput('')
     setError(null)
+    ai.reset()
   }
 
   const handleCopyAndClose = async () => {
     if (!output) return
     await window.api.clipboard.write(output)
     window.api.window.hide()
+  }
+
+  const handleMagicFix = () => {
+    ai.reset()
+    ai.generate(`Fix this malformed JSON:\n${input}`)
   }
 
   return (
@@ -113,6 +146,29 @@ export default function JsonFormatterView() {
         <div className="rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-500">
           {error}
         </div>
+      )}
+
+      {error && input.trim() && (
+        <AiActionBar
+          input={input}
+          onMagicFix={handleMagicFix}
+          showMagicFix
+          showExplain={false}
+          showGenerate={false}
+          isError
+          isStreaming={ai.isStreaming}
+          activeAction={ai.isStreaming ? 'magic-fix' : null}
+          providerUsed={ai.providerUsed}
+          isLocal={ai.isLocal}
+        />
+      )}
+
+      {(ai.isStreaming || ai.output || ai.error) && (
+        <StreamingOutput
+          output={ai.output}
+          isStreaming={ai.isStreaming}
+          error={ai.error}
+        />
       )}
 
       <div className="grid min-h-0 flex-1 grid-cols-2 gap-3">
