@@ -121,6 +121,7 @@ export default function TextInspectorView() {
         icon={FileSearch}
         name="Text Inspector"
         description="Analyze text with character, word, and line statistics"
+        toolId="text-inspector"
       />
 
       <div className="flex items-center gap-2">

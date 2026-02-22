@@ -96,6 +96,7 @@ export default function HtmlFormatterView() {
         icon={Globe}
         name="HTML Formatter"
         description="Format and minify HTML markup"
+        toolId="html-formatter"
       />
 
       <div className="flex flex-wrap items-center gap-2">

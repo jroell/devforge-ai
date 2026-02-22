@@ -69,6 +69,7 @@ export default function CodeGeneratorView() {
         icon={FileType}
         name="AI Type Generator"
         description="Generate TypeScript, Go, Rust, or Python types from JSON"
+        toolId="code-generator"
         aiEnabled
       />
 

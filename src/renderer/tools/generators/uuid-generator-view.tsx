@@ -45,6 +45,7 @@ export default function UuidGeneratorView() {
         icon={Fingerprint}
         name="UUID Generator"
         description="Generate UUIDs (v4) and ULID-style sortable IDs"
+        toolId="uuid-generator"
       />
 
       {/* Actions */}

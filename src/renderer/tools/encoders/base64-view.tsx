@@ -95,6 +95,7 @@ export default function Base64View() {
         icon={Binary}
         name="Base64 Encode/Decode"
         description="Encode and decode Base64 strings"
+        toolId="base64"
       />
 
       <Tabs

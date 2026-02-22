@@ -78,6 +78,7 @@ export default function CronParserView() {
         icon={Timer}
         name="Cron Parser"
         description="Parse and explain cron expressions"
+        toolId="cron-parser"
         aiEnabled
       />
 

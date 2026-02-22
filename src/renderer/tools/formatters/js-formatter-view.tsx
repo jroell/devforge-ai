@@ -102,6 +102,7 @@ export default function JsFormatterView() {
         icon={FileJson2}
         name="JS/TS Formatter"
         description="Format JavaScript and TypeScript with Prettier"
+        toolId="js-formatter"
       />
 
       <div className="flex flex-wrap items-center gap-2">

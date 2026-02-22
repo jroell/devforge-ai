@@ -145,6 +145,7 @@ export default function NumberBaseView() {
         icon={Calculator}
         name="Number Base Converter"
         description="Convert between binary, octal, decimal, and hexadecimal"
+        toolId="number-base"
       />
 
       <div className="flex items-center gap-2">

@@ -29,6 +29,7 @@ export default function MagicTransformView() {
         icon={Wand2}
         name="Magic Transform"
         description="Transform data using natural language prompts"
+        toolId="magic-transform"
         aiEnabled
       />
 

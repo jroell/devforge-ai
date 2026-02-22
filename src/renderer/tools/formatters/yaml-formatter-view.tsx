@@ -89,6 +89,7 @@ export default function YamlFormatterView() {
         icon={FileText}
         name="YAML Formatter"
         description="Format and validate YAML documents"
+        toolId="yaml-formatter"
       />
 
       <div className="flex flex-wrap items-center gap-2">

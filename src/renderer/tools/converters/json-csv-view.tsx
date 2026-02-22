@@ -170,6 +170,7 @@ export default function JsonCsvView() {
         icon={Table}
         name="JSON ↔ CSV Converter"
         description="Convert between JSON arrays and CSV format"
+        toolId="json-csv"
       />
 
       <Tabs value={mode} onValueChange={(v) => setMode(v as 'json-to-csv' | 'csv-to-json')}>

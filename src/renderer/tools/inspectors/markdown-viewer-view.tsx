@@ -181,6 +181,7 @@ export default function MarkdownViewerView() {
         icon={BookOpen}
         name="Markdown/Mermaid Viewer"
         description="Preview Markdown with GFM tables and all Mermaid diagram types"
+        toolId="markdown-viewer"
       />
 
       <div className="flex items-center gap-2">

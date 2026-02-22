@@ -110,6 +110,7 @@ export default function TextCaseView() {
         icon={CaseSensitive}
         name="Text Case Converter"
         description="Convert text between camelCase, snake_case, kebab-case, and more"
+        toolId="text-case"
       />
 
       <div className="flex items-center gap-2">

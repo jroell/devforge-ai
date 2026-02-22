@@ -46,6 +46,7 @@ export default function LogAnalyzerView() {
         icon={Bug}
         name="Log/Error Analyzer"
         description="AI-powered stack trace and error log analysis"
+        toolId="log-analyzer"
         aiEnabled
       />
 

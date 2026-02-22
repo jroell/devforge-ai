@@ -1,15 +1,19 @@
 import type { LucideIcon } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Sparkles } from 'lucide-react'
+import { PopOutButton } from './PopOutButton'
 
 interface ToolHeaderProps {
   icon: LucideIcon
   name: string
   description: string
   aiEnabled?: boolean
+  toolId?: string
 }
 
-export function ToolHeader({ icon: Icon, name, description, aiEnabled }: ToolHeaderProps) {
+export function ToolHeader({ icon: Icon, name, description, aiEnabled, toolId }: ToolHeaderProps) {
+  const isPopout = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('tool')
+
   return (
     <div className="flex items-start gap-3">
       <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -24,6 +28,7 @@ export function ToolHeader({ icon: Icon, name, description, aiEnabled }: ToolHea
               AI
             </Badge>
           )}
+          {toolId && !isPopout && <PopOutButton toolId={toolId} />}
         </div>
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>

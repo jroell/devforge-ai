@@ -120,6 +120,7 @@ export default function XmlFormatterView() {
         icon={FileCode}
         name="XML Formatter"
         description="Format and minify XML documents"
+        toolId="xml-formatter"
       />
 
       <div className="flex flex-wrap items-center gap-2">

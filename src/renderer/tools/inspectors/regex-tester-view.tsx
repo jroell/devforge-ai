@@ -214,6 +214,7 @@ export default function RegexTesterView() {
         icon={Regex}
         name="Regex Tester"
         description="Test regular expressions with real-time matching and capture groups"
+        toolId="regex-tester"
         aiEnabled
       />
 

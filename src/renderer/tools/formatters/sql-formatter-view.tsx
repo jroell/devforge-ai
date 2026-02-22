@@ -111,6 +111,7 @@ export default function SqlFormatterView() {
         icon={Database}
         name="SQL Formatter"
         description="Format SQL queries with dialect support"
+        toolId="sql-formatter"
       />
 
       <div className="flex flex-wrap items-center gap-2">

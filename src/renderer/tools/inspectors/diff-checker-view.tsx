@@ -81,6 +81,7 @@ export default function DiffCheckerView() {
         icon={GitCompare}
         name="Diff Checker"
         description="Compare two texts and highlight differences"
+        toolId="diff-checker"
       />
 
       <div className="flex items-center gap-2">

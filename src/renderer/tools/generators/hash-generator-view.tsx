@@ -75,6 +75,7 @@ export default function HashGeneratorView() {
         icon={Hash}
         name="Hash Generator"
         description="Generate MD5, SHA-1, SHA-256, SHA-512, and bcrypt hashes"
+        toolId="hash-generator"
       />
 
       <div className="flex flex-wrap items-center gap-2">

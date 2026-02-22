@@ -89,6 +89,7 @@ export default function UrlEncoderView() {
         icon={Link}
         name="URL Encode/Decode"
         description="Encode and decode URL components"
+        toolId="url-encoder"
       />
 
       <Tabs

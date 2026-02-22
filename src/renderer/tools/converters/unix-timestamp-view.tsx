@@ -140,6 +140,7 @@ export default function UnixTimestampView() {
         icon={Clock}
         name="Unix Timestamp"
         description="Convert between Unix timestamps and human-readable dates"
+        toolId="unix-timestamp"
       />
 
       <div className="flex flex-wrap items-center gap-2">

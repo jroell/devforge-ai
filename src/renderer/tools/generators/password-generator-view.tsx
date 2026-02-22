@@ -114,6 +114,7 @@ export default function PasswordGeneratorView() {
         icon={KeyRound}
         name="Password Generator"
         description="Generate secure random passwords with custom options"
+        toolId="password-generator"
       />
 
       <div className="flex items-center gap-2">

@@ -58,6 +58,7 @@ export default function MockDataGeneratorView() {
         icon={Database}
         name="AI Mock Data"
         description="Generate realistic mock data with AI"
+        toolId="mock-data-generator"
         aiEnabled
       />
 

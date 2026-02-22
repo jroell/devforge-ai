@@ -96,6 +96,7 @@ export default function CssFormatterView() {
         icon={Palette}
         name="CSS Formatter"
         description="Format and minify CSS stylesheets"
+        toolId="css-formatter"
       />
 
       <div className="flex flex-wrap items-center gap-2">

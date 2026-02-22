@@ -98,6 +98,7 @@ export default function JsonYamlView() {
         icon={ArrowLeftRight}
         name="JSON ↔ YAML Converter"
         description="Convert between JSON and YAML formats"
+        toolId="json-yaml"
       />
 
       <Tabs value={mode} onValueChange={(v) => setMode(v as 'json-to-yaml' | 'yaml-to-json')}>

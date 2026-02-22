@@ -97,6 +97,7 @@ export default function HexAsciiView() {
         icon={Hash}
         name="Hex/ASCII Converter"
         description="Convert between hexadecimal and ASCII text"
+        toolId="hex-ascii"
       />
 
       <Tabs value={mode} onValueChange={(v) => setMode(v as 'text-to-hex' | 'hex-to-text')}>

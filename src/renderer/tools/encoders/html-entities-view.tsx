@@ -95,6 +95,7 @@ export default function HtmlEntitiesView() {
         icon={Code}
         name="HTML Entity Encoder/Decoder"
         description="Encode and decode HTML entities"
+        toolId="html-entities"
       />
 
       <Tabs value={mode} onValueChange={(v) => setMode(v as 'encode' | 'decode')}>

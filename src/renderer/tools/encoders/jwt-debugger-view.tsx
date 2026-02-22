@@ -107,6 +107,7 @@ export default function JwtDebuggerView() {
         icon={KeyRound}
         name="JWT Debugger"
         description="Decode and inspect JSON Web Tokens"
+        toolId="jwt-debugger"
         aiEnabled
       />
 

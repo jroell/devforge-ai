@@ -112,6 +112,7 @@ export default function JsonFormatterView() {
         icon={Braces}
         name="JSON Formatter"
         description="Format, minify, and validate JSON"
+        toolId="json-formatter"
         aiEnabled
       />
 
