@@ -3,6 +3,7 @@ import { TitleBar } from '@/components/layout/TitleBar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToolShell } from '@/components/layout/ToolShell'
 import { useSettingsStore } from '@/stores/settings'
+import { useAiConfigStore } from '@/stores/ai-config'
 
 // Side-effect import: triggers tool self-registration
 import '@/tools/register'
@@ -16,6 +17,10 @@ function App(): React.JSX.Element {
     })
     return unsubscribe
   }, [setActiveTool])
+
+  useEffect(() => {
+    useAiConfigStore.getState().loadFromKeychain()
+  }, [])
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">

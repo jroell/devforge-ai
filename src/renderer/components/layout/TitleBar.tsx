@@ -1,14 +1,18 @@
-import { Minus, X, Sun, Moon, PanelLeftClose, PanelLeft } from 'lucide-react'
+import { useState } from 'react'
+import { Minus, X, Sun, Moon, PanelLeftClose, PanelLeft, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useSettingsStore } from '@/stores/settings'
+import { SettingsDialog } from '@/components/settings/SettingsDialog'
 
 const isMac = navigator.userAgent.includes('Mac')
 
 export function TitleBar() {
   const { sidebarCollapsed, toggleSidebar, theme, setTheme } = useSettingsStore()
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   return (
+    <>
     <div className="drag-region flex h-12 shrink-0 items-center border-b border-border bg-background">
       {/* Left: macOS traffic light spacing + sidebar toggle */}
       <div className="flex items-center">
@@ -41,8 +45,24 @@ export function TitleBar() {
         <span className="text-sm font-semibold text-muted-foreground">DevForge AI</span>
       </div>
 
-      {/* Right: Theme toggle + window controls */}
+      {/* Right: Settings + Theme toggle + window controls */}
       <div className="flex items-center gap-1 pr-2">
+        <TooltipProvider delayDuration={300}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="no-drag"
+                onClick={() => setSettingsOpen(true)}
+              >
+                <Settings className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Settings</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
         <TooltipProvider delayDuration={300}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -87,5 +107,7 @@ export function TitleBar() {
         )}
       </div>
     </div>
+    <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
+    </>
   )
 }
