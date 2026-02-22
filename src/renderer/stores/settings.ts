@@ -1,12 +1,14 @@
 import { create } from 'zustand'
 
+export type Theme = 'dark' | 'light' | 'dracula'
+
 interface SettingsState {
   activeTool: string
   sidebarCollapsed: boolean
-  theme: 'dark' | 'light'
+  theme: Theme
   setActiveTool: (toolId: string) => void
   toggleSidebar: () => void
-  setTheme: (theme: 'dark' | 'light') => void
+  setTheme: (theme: Theme) => void
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
@@ -18,11 +20,10 @@ export const useSettingsStore = create<SettingsState>((set) => ({
 
   toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
 
-  setTheme: (theme: 'dark' | 'light') => {
-    if (theme === 'light') {
-      document.documentElement.classList.add('light')
-    } else {
-      document.documentElement.classList.remove('light')
+  setTheme: (theme: Theme) => {
+    document.documentElement.classList.remove('light', 'dracula')
+    if (theme !== 'dark') {
+      document.documentElement.classList.add(theme)
     }
     set({ theme })
   }

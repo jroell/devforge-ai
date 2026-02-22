@@ -1,15 +1,18 @@
 import { useState } from 'react'
-import { Minus, X, Sun, Moon, PanelLeftClose, PanelLeft, Settings } from 'lucide-react'
+import { Minus, X, Sun, Moon, Palette, PanelLeftClose, PanelLeft, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { useSettingsStore } from '@/stores/settings'
+import { useSettingsStore, type Theme } from '@/stores/settings'
 import { SettingsDialog } from '@/components/settings/SettingsDialog'
 
 const isMac = navigator.userAgent.includes('Mac')
+const themeOrder: Theme[] = ['dark', 'light', 'dracula']
+const themeLabels: Record<Theme, string> = { dark: 'Dark', light: 'Light', dracula: 'Dracula' }
 
 export function TitleBar() {
   const { sidebarCollapsed, toggleSidebar, theme, setTheme } = useSettingsStore()
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const nextTheme = themeOrder[(themeOrder.indexOf(theme) + 1) % themeOrder.length]
 
   return (
     <>
@@ -70,17 +73,19 @@ export function TitleBar() {
                 variant="ghost"
                 size="icon-sm"
                 className="no-drag"
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                onClick={() => setTheme(nextTheme)}
               >
-                {theme === 'dark' ? (
+                {theme === 'light' ? (
                   <Sun className="size-4" />
+                ) : theme === 'dracula' ? (
+                  <Palette className="size-4" />
                 ) : (
                   <Moon className="size-4" />
                 )}
               </Button>
             </TooltipTrigger>
             <TooltipContent side="bottom">
-              {theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              Switch to {themeLabels[nextTheme]}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

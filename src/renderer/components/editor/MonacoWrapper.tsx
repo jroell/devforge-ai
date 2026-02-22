@@ -36,7 +36,7 @@ export function MonacoWrapper({
   return (
     <div className={className} style={{ height }}>
       <Editor
-        theme={theme === 'dark' ? 'vs-dark' : 'vs'}
+        theme={theme === 'light' ? 'vs' : 'vs-dark'}
         language={language}
         value={value}
         onChange={handleChange}

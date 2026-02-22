@@ -34,15 +34,19 @@ function GeneralTab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="space-y-0.5">
-          <Label>Dark Mode</Label>
-          <p className="text-xs text-muted-foreground">Toggle between dark and light theme</p>
-        </div>
-        <Switch
-          checked={theme === 'dark'}
-          onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
-        />
+      <div className="space-y-2">
+        <Label>Theme</Label>
+        <p className="text-xs text-muted-foreground">Choose your preferred color scheme</p>
+        <Select value={theme} onValueChange={(v) => setTheme(v as 'dark' | 'light' | 'dracula')}>
+          <SelectTrigger className="w-48">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="dark">Dark</SelectItem>
+            <SelectItem value="light">Light</SelectItem>
+            <SelectItem value="dracula">Dracula</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">

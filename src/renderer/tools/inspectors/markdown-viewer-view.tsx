@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { BookOpen, Eraser } from 'lucide-react'
+import { BookOpen, Eraser, FileDown } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import mermaid from 'mermaid'
 import { Button } from '@/components/ui/button'
 import { ToolHeader } from '@/components/shared/ToolHeader'
 import { MonacoWrapper } from '@/components/editor/MonacoWrapper'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { useSettingsStore } from '@/stores/settings'
 
 let mermaidId = 0
@@ -106,7 +105,7 @@ export default function MarkdownViewerView() {
   useEffect(() => {
     mermaid.initialize({
       startOnLoad: false,
-      theme: theme === 'dark' ? 'dark' : 'default',
+      theme: theme === 'light' ? 'default' : 'dark',
       securityLevel: 'loose',
       fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
       flowchart: { useMaxWidth: true, htmlLabels: true },
@@ -127,9 +126,35 @@ export default function MarkdownViewerView() {
     })
   }, [])
 
+  const previewRef = useRef<HTMLDivElement>(null)
+
   const handleClear = () => {
     setInput('')
   }
+
+  const handleSavePdf = useCallback(() => {
+    if (!previewRef.current) return
+    const content = previewRef.current.innerHTML
+    const win = window.open('', '_blank')
+    if (!win) return
+    win.document.write(`<!DOCTYPE html>
+<html><head><title>Markdown Preview</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 800px; margin: 40px auto; padding: 0 20px; color: #222; line-height: 1.6; }
+  h1 { border-bottom: 1px solid #ddd; padding-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+  th { background: #f5f5f5; font-weight: 600; }
+  pre { background: #f5f5f5; padding: 12px; border-radius: 6px; overflow-x: auto; }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 0.9em; }
+  blockquote { border-left: 4px solid #ddd; margin: 12px 0; padding-left: 16px; color: #666; }
+  img, svg { max-width: 100%; }
+  @media print { body { margin: 0; } }
+</style></head><body>${content}</body></html>`)
+    win.document.close()
+    setTimeout(() => { win.print() }, 500)
+  }, [])
 
   // Force re-render of mermaid blocks when theme changes
   const [renderKey, setRenderKey] = useState(0)
@@ -197,6 +222,10 @@ export default function MarkdownViewerView() {
           >
             Load Example
           </Button>
+          <Button variant="outline" size="sm" onClick={handleSavePdf} disabled={!input.trim()}>
+            <FileDown className="size-3.5" />
+            Save as PDF
+          </Button>
         </div>
       </div>
 
@@ -217,8 +246,9 @@ export default function MarkdownViewerView() {
         {/* Preview pane */}
         <div className="flex flex-col gap-1.5 overflow-hidden">
           <span className="text-sm font-medium">Preview</span>
-          <ScrollArea className="flex-1 rounded-md border border-border bg-muted/10 p-4">
+          <div className="flex-1 overflow-y-auto rounded-md border border-border bg-muted/10 p-4">
             <div
+              ref={previewRef}
               className="prose prose-invert max-w-none
                 [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1]:border-b [&_h1]:border-border [&_h1]:pb-2
                 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mb-3 [&_h2]:mt-5
@@ -251,7 +281,7 @@ export default function MarkdownViewerView() {
                 {input}
               </ReactMarkdown>
             </div>
-          </ScrollArea>
+          </div>
         </div>
       </div>
     </div>
