@@ -26,5 +26,5 @@ export const categoryLabels: Record<ToolCategory, string> = {
 }
 
 export const categoryOrder: ToolCategory[] = [
-  'formatters', 'encoders', 'converters', 'generators', 'inspectors', 'ai', 'custom'
+  'custom', 'formatters', 'encoders', 'converters', 'generators', 'inspectors', 'ai'
 ]
